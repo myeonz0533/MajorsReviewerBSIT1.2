@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How This App Was Built - Tutorial Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #7B2CBF;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            border-bottom: 4px solid #7B2CBF;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #5A189A;
+            font-size: 2em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 5px solid #7B2CBF;
+        }
+
+        h3 {
+            color: #9D4EDD;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .code-block {
+            background: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: #d63384;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .tip-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .file-structure {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+        }
+
+        .file-structure .folder {
+            color: #ffd700;
+        }
+
+        .file-structure .file {
+            color: #87ceeb;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #7B2CBF;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .step {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #7B2CBF;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #7B2CBF;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #7B2CBF;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #7B2CBF;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        /* Dark Mode Styles */
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+            color: #E8F5E9;
+        }
+
+        [data-theme="dark"] .container {
+            background: #1A1A1A;
+            color: #E8F5E9;
+        }
+
+        [data-theme="dark"] h1 {
+            color: #6BA83A;
+            border-bottom-color: #6BA83A;
+        }
+
+        [data-theme="dark"] h2 {
+            color: #8BC34A;
+            border-left-color: #6BA83A;
+        }
+
+        [data-theme="dark"] h3 {
+            color: #A5D65A;
+        }
+
+        [data-theme="dark"] .code-block {
+            background: #2A2A2A;
+            border-color: #4A7C2A;
+            color: #E8F5E9;
+        }
+
+        [data-theme="dark"] .info-box {
+            background: #1F3A0F;
+            border-left-color: #4ECDC4;
+        }
+
+        [data-theme="dark"] .tip-box {
+            background: #2A3A1F;
+            border-left-color: #6BA83A;
+        }
+
+        [data-theme="dark"] .warning-box {
+            background: #3A2A1F;
+            border-left-color: #FFD93D;
+        }
+
+        [data-theme="dark"] .step {
+            background: #2A2A2A;
+            border-left-color: #6BA83A;
+        }
+
+        [data-theme="dark"] th {
+            background: #4A7C2A;
+        }
+
+        [data-theme="dark"] tr:nth-child(even) {
+            background: #2A2A2A;
+        }
+
+        /* Music and Theme Toggle Buttons */
+        .music-toggle-tutorial,
+        .theme-toggle-tutorial {
+            background: rgba(123, 44, 191, 0.2);
+            border: 2px solid rgba(123, 44, 191, 0.3);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .music-toggle-tutorial:hover,
+        .theme-toggle-tutorial:hover {
+            background: rgba(123, 44, 191, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(123, 44, 191, 0.3);
+        }
+
+        [data-theme="dark"] .music-toggle-tutorial,
+        [data-theme="dark"] .theme-toggle-tutorial {
+            background: rgba(107, 168, 58, 0.2);
+            border-color: rgba(107, 168, 58, 0.4);
+        }
+
+        [data-theme="dark"] .music-toggle-tutorial:hover,
+        [data-theme="dark"] .theme-toggle-tutorial:hover {
+            background: rgba(107, 168, 58, 0.4);
+            box-shadow: 0 4px 15px rgba(107, 168, 58, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <a href="index.html" class="back-link">← Back to App</a>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button id="music-toggle" class="music-toggle-tutorial" title="Play/Pause Music">
+                    <span id="music-icon">⏸️</span>
+                </button>
+                <button id="theme-toggle" class="theme-toggle-tutorial" title="Toggle Dark/Light Mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+        
+        <h1>📚 How This App Was Built - A Complete Tutorial</h1>
+        <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">
+            Learn how to create a similar educational review application step by step!
+        </p>
+
+        <h2>📁 Project Structure</h2>
+        <p>This application consists of four main files:</p>
+        <div class="file-structure">
+<span class="folder">oops-review-app/</span><br>
+├── <span class="file">index.html</span> - Main HTML structure<br>
+├── <span class="file">styles.css</span> - All styling and design<br>
+├── <span class="file">app.js</span> - Application logic and functionality<br>
+├── <span class="file">data.js</span> - Content data (topics and questions)<br>
+└── <span class="file">tutorial.html</span> - This tutorial file
+        </div>
+
+        <h2>1️⃣ Understanding HTML (index.html)</h2>
+        <p>HTML (HyperText Markup Language) provides the <span class="highlight">structure</span> of the webpage. Think of it as the skeleton of your application.</p>
+
+        <h3>Key HTML Concepts Used:</h3>
+        <ul>
+            <li><strong>&lt;div&gt;</strong> - Container elements that group content</li>
+            <li><strong>&lt;header&gt;</strong> - Top section with title and theme toggle</li>
+            <li><strong>&lt;nav&gt;</strong> - Navigation buttons (Reading Mode / Quiz Mode)</li>
+            <li><strong>&lt;aside&gt;</strong> - Sidebar for topic navigation</li>
+            <li><strong>&lt;main&gt;</strong> - Main content area</li>
+            <li><strong>&lt;button&gt;</strong> - Clickable buttons</li>
+            <li><strong>id attributes</strong> - Unique identifiers for JavaScript to find elements</li>
+            <li><strong>class attributes</strong> - Groups of elements for styling</li>
+        </ul>
+
+        <div class="info-box">
+            <strong>💡 Tip:</strong> HTML elements are like building blocks. Each element has a purpose and can contain other elements.
+        </div>
+
+        <h3>Example: Basic HTML Structure</h3>
+        <div class="code-block">
+&lt;div class="container"&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;/header&gt;
+    &lt;div id="content"&gt;
+        &lt;p&gt;Content goes here&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+
+        <h2>2️⃣ Understanding CSS (styles.css)</h2>
+        <p>CSS (Cascading Style Sheets) controls the <span class="highlight">appearance</span> of your webpage. It's like the paint and decoration for your HTML structure.</p>
+
+        <h3>Key CSS Concepts Used:</h3>
+        <ul>
+            <li><strong>Selectors</strong> - Target HTML elements (e.g., <code>.class-name</code>, <code>#id-name</code>)</li>
+            <li><strong>Properties</strong> - What you're changing (e.g., <code>color</code>, <code>background</code>, <code>padding</code>)</li>
+            <li><strong>Values</strong> - The actual change (e.g., <code>red</code>, <code>20px</code>, <code>#7B2CBF</code>)</li>
+            <li><strong>CSS Variables</strong> - Reusable values (e.g., <code>--primary-purple: #7B2CBF</code>)</li>
+            <li><strong>Media Queries</strong> - Responsive design for mobile devices</li>
+            <li><strong>Flexbox</strong> - Layout system for arranging elements</li>
+        </ul>
+
+        <h3>Example: CSS Styling</h3>
+        <div class="code-block">
+/* Target an element by class */
+.button {
+    background: #7B2CBF;  /* Purple background */
+    color: white;          /* White text */
+    padding: 10px 20px;    /* Space inside */
+    border-radius: 5px;    /* Rounded corners */
+}
+
+/* Target an element by ID */
+#header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Hover effect */
+.button:hover {
+    background: #5A189A;  /* Darker purple on hover */
+}
+        </div>
+
+        <div class="tip-box">
+            <strong>✨ Pro Tip:</strong> CSS Variables (like <code>--primary-purple</code>) allow you to change colors throughout your entire app by updating just one value!
+        </div>
+
+        <h3>Dark Mode Implementation</h3>
+        <p>The app uses CSS variables and a <code>data-theme</code> attribute to switch between light and dark modes:</p>
+        <div class="code-block">
+/* Light mode colors */
+:root {
+    --primary-color: #7B2CBF;
+    --bg-color: #FFFFFF;
+}
+
+/* Dark mode colors */
+[data-theme="dark"] {
+    --primary-color: #6BA83A;
+    --bg-color: #1A1A1A;
+}
+        </div>
+
+        <h2>3️⃣ Understanding JavaScript (app.js)</h2>
+        <p>JavaScript adds <span class="highlight">interactivity</span> to your webpage. It makes buttons work, handles user clicks, and updates content dynamically.</p>
+
+        <h3>Key JavaScript Concepts Used:</h3>
+        <ul>
+            <li><strong>Variables</strong> - Store data (<code>let currentTopic = 0</code>)</li>
+            <li><strong>Functions</strong> - Reusable blocks of code</li>
+            <li><strong>Event Listeners</strong> - React to user actions (clicks, etc.)</li>
+            <li><strong>DOM Manipulation</strong> - Change HTML content dynamically</li>
+            <li><strong>Arrays</strong> - Lists of data</li>
+            <li><strong>Objects</strong> - Collections of related data</li>
+            <li><strong>Conditionals</strong> - Make decisions (<code>if/else</code>)</li>
+            <li><strong>Loops</strong> - Repeat actions (<code>forEach</code>)</li>
+        </ul>
+
+        <h3>Example: Basic JavaScript Function</h3>
+        <div class="code-block">
+// Function to change topic
+function loadTopic(index) {
+    // Get the topic data
+    const topic = topics[index];
+    
+    // Find the HTML element and update it
+    document.getElementById('topic-title').textContent = topic.title;
+    document.getElementById('topic-content').innerHTML = topic.content;
+}
+
+// Event listener - runs when button is clicked
+document.getElementById('next-btn').addEventListener('click', function() {
+    currentTopic++;
+    loadTopic(currentTopic);
+});
+        </div>
+
+        <h3>How Event Listeners Work</h3>
+        <p>Event listeners "listen" for user actions and respond:</p>
+        <div class="code-block">
+// When user clicks a button
+button.addEventListener('click', function() {
+    // This code runs when button is clicked
+    alert('Button was clicked!');
+});
+        </div>
+
+        <h2>4️⃣ Understanding Data Structure (data.js)</h2>
+        <p>The data file stores all the content (topics and quiz questions) in a structured format called <span class="highlight">JavaScript Objects</span>.</p>
+
+        <h3>Data Structure Example</h3>
+        <div class="code-block">
+const appData = {
+    oops: {
+        topics: [
+            {
+                title: "Introduction to OOP",
+                content: ["First paragraph", "Second paragraph"]
+            }
+        ],
+        questions: [
+            {
+                question: "What is OOP?",
+                options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+                correctAnswer: 0,
+                explanation: "OOP stands for..."
+            }
+        ]
+    }
+};
+        </div>
+
+        <div class="info-box">
+            <strong>📊 Data Structure:</strong> Think of it like a filing cabinet - organized sections (oops, linux) containing folders (topics, questions) with files inside (individual topics/questions).
+        </div>
+
+        <h2>5️⃣ How Everything Works Together</h2>
+        <p>Here's the flow of how the app works:</p>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Page Loads</strong> - HTML structure appears, CSS styles it, JavaScript initializes
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>User Clicks Button</strong> - JavaScript event listener detects the click
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>JavaScript Function Runs</strong> - Gets data from data.js, updates HTML elements
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>CSS Styles Apply</strong> - Visual changes appear based on classes/IDs
+        </div>
+
+        <div class="step">
+            <span class="step-number">5</span>
+            <strong>User Sees Result</strong> - Updated content displayed with styling
+        </div>
+
+        <h2>6️⃣ Step-by-Step: Creating Your Own Version</h2>
+
+        <h3>Step 1: Create the HTML Structure</h3>
+        <div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My App&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;My App Title&lt;/h1&gt;
+        &lt;div id="content"&gt;Content here&lt;/div&gt;
+        &lt;button id="my-button"&gt;Click Me&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </div>
+
+        <h3>Step 2: Add Basic CSS Styling</h3>
+        <div class="code-block">
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+}
+
+#my-button {
+    background: #7B2CBF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+        </div>
+
+        <h3>Step 3: Add JavaScript Functionality</h3>
+        <div class="code-block">
+// Wait for page to load
+document.addEventListener('DOMContentLoaded', function() {
+    // Find the button
+    const button = document.getElementById('my-button');
+    
+    // Add click listener
+    button.addEventListener('click', function() {
+        // Find content area
+        const content = document.getElementById('content');
+        
+        // Update content
+        content.textContent = 'Button was clicked!';
+    });
+});
+        </div>
+
+        <h3>Step 4: Add Your Data</h3>
+        <div class="code-block">
+const myData = {
+    topics: [
+        {
+            title: "My First Topic",
+            content: "This is the content..."
+        }
+    ]
+};
+        </div>
+
+        <h2>7️⃣ Key Programming Concepts Explained</h2>
+
+        <h3>Variables</h3>
+        <p>Variables store information:</p>
+        <div class="code-block">
+let currentIndex = 0;        // Number
+let userName = "John";       // Text (string)
+let isActive = true;         // True/False (boolean)
+        </div>
+
+        <h3>Functions</h3>
+        <p>Functions are reusable blocks of code:</p>
+        <div class="code-block">
+function greetUser(name) {
+    return "Hello, " + name;
+}
+
+// Use the function
+let message = greetUser("Alice");
+        </div>
+
+        <h3>Arrays and Loops</h3>
+        <div class="code-block">
+let items = ["Apple", "Banana", "Orange"];
+
+// Loop through array
+items.forEach(function(item) {
+    console.log(item);
+});
+        </div>
+
+        <h3>Objects</h3>
+        <div class="code-block">
+let person = {
+    name: "John",
+    age: 25,
+    city: "New York"
+};
+
+// Access properties
+console.log(person.name);  // "John"
+        </div>
+
+        <h2>8️⃣ Common Patterns Used in This App</h2>
+
+        <h3>Pattern 1: Show/Hide Content</h3>
+        <div class="code-block">
+// Hide element
+element.style.display = 'none';
+
+// Show element
+element.style.display = 'block';
+        </div>
+
+        <h3>Pattern 2: Add/Remove Classes</h3>
+        <div class="code-block">
+// Add active class
+element.classList.add('active');
+
+// Remove active class
+element.classList.remove('active');
+        </div>
+
+        <h3>Pattern 3: Update Content Dynamically</h3>
+        <div class="code-block">
+// Change text
+element.textContent = "New text";
+
+// Change HTML
+element.innerHTML = "&lt;p&gt;New HTML&lt;/p&gt;";
+        </div>
+
+        <h3>Pattern 4: Event Delegation</h3>
+        <div class="code-block">
+// Listen for clicks on parent, handle child clicks
+parent.addEventListener('click', function(e) {
+    if (e.target.classList.contains('child')) {
+        // Handle click
+    }
+});
+        </div>
+
+        <h2>9️⃣ Responsive Design</h2>
+        <p>Media queries make your app work on mobile devices:</p>
+        <div class="code-block">
+/* Default styles */
+.container {
+    width: 100%;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+    }
+}
+        </div>
+
+        <h2>🔟 Tips for Building Similar Apps</h2>
+
+        <div class="tip-box">
+            <strong>✅ Start Simple:</strong> Begin with basic HTML, then add CSS, then JavaScript. Don't try to do everything at once!
+        </div>
+
+        <div class="tip-box">
+            <strong>✅ Plan Your Data Structure:</strong> Think about how you'll organize your content before coding.
+        </div>
+
+        <div class="tip-box">
+            <strong>✅ Use Comments:</strong> Add comments in your code to explain what each section does.
+        </div>
+
+        <div class="tip-box">
+            <strong>✅ Test Frequently:</strong> Test your app as you build it, not just at the end.
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Common Mistakes:</strong>
+            <ul>
+                <li>Forgetting to link CSS/JS files in HTML</li>
+                <li>Using wrong selectors (class vs ID)</li>
+                <li>Not checking if elements exist before using them</li>
+                <li>Forgetting semicolons in JavaScript</li>
+            </ul>
+        </div>
+
+        <h2>1️⃣1️⃣ Resources for Learning More</h2>
+        <ul>
+            <li><strong>MDN Web Docs</strong> - Comprehensive HTML, CSS, and JavaScript documentation</li>
+            <li><strong>W3Schools</strong> - Beginner-friendly tutorials</li>
+            <li><strong>freeCodeCamp</strong> - Free interactive coding lessons</li>
+            <li><strong>JavaScript.info</strong> - Modern JavaScript tutorial</li>
+        </ul>
+
+        <h2>1️⃣2️⃣ Summary</h2>
+        <p>This app demonstrates:</p>
+        <ul>
+            <li>✅ <strong>HTML</strong> for structure</li>
+            <li>✅ <strong>CSS</strong> for styling and responsive design</li>
+            <li>✅ <strong>JavaScript</strong> for interactivity</li>
+            <li>✅ <strong>Data organization</strong> for content management</li>
+            <li>✅ <strong>Event handling</strong> for user interactions</li>
+            <li>✅ <strong>DOM manipulation</strong> for dynamic content updates</li>
+        </ul>
+
+        <div class="info-box" style="margin-top: 40px; text-align: center; font-size: 1.2em;">
+            <strong>🎓 Remember:</strong> Every complex app starts with simple HTML, CSS, and JavaScript. Practice, experiment, and don't be afraid to make mistakes!
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid #ddd;">
+            <a href="index.html" class="back-link">← Back to App</a>
+        </div>
+    </div>
+
+    <!-- Music Player -->
+    <audio id="background-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+        <source src="music.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Music Player Setup
+        function setupMusicPlayer() {
+            const audio = document.getElementById('background-music');
+            const musicToggle = document.getElementById('music-toggle');
+            const musicIcon = document.getElementById('music-icon');
+            
+            if (!audio || !musicToggle) return;
+            
+            // Try to auto-play music (may be blocked by browser)
+            audio.volume = 0.3; // Set volume to 30%
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Music started playing
+                    updateMusicIcon(true, musicIcon);
+                }).catch(error => {
+                    // Auto-play was prevented
+                    console.log('Auto-play prevented:', error);
+                    updateMusicIcon(false, musicIcon);
+                });
+            }
+            
+            // Update icon when music ends (for looping)
+            audio.addEventListener('ended', function() {
+                audio.currentTime = 0;
+                audio.play();
+            });
+            
+            // Toggle play/pause on button click
+            musicToggle.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        updateMusicIcon(true, musicIcon);
+                    }).catch(error => {
+                        console.log('Play failed:', error);
+                    });
+                } else {
+                    audio.pause();
+                    updateMusicIcon(false, musicIcon);
+                }
+            });
+            
+            // Update icon based on play state
+            audio.addEventListener('play', () => updateMusicIcon(true, musicIcon));
+            audio.addEventListener('pause', () => updateMusicIcon(false, musicIcon));
+        }
+
+        function updateMusicIcon(isPlaying, iconElement) {
+            if (iconElement) {
+                iconElement.textContent = isPlaying ? '⏸️' : '▶️';
+            }
+        }
+
+        // Theme Toggle Setup
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const html = document.documentElement;
+            
+            // Load saved theme preference
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme, themeIcon);
+            
+            // Toggle theme on button click
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme, themeIcon);
+            });
+        }
+
+        function updateThemeIcon(theme, iconElement) {
+            if (theme === 'dark') {
+                iconElement.textContent = '☀️';
+            } else {
+                iconElement.textContent = '🌙';
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupMusicPlayer();
+            setupThemeToggle();
+        });
+    </script>
+</body>
+</html>
